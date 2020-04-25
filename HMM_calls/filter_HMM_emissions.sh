@@ -1,0 +1,33 @@
+#!/bin/sh
+
+cd ~/cifs-lab/PolV_surveillance_manuscript/Bioinformatics/HMM_calling/our_fav_HMM/postHMM_filter
+awk '{OFS="\t"}{print $0,0,"+"}' ../output_em0.bed | intersectBed -c -a stdin -b ~/cifs-lab/PolV_surveillance_manuscript/Bioinformatics/mapped_combined_reads/col0_3reps_sort_dedup_filtChr.bed | intersectBed -c -a stdin -b ~/cifs-lab/PolV_surveillance_manuscript/Bioinformatics/mapped_combined_reads/nrpe1_3reps_sort_dedup_filtChr.bed | intersectBed -c -s -a stdin -b ~/cifs-lab/PolV_surveillance_manuscript/Bioinformatics/mapped_combined_reads/col0_3reps_sort_dedup_filtChr.bed | intersectBed -c -S -a stdin -b ~/cifs-lab/PolV_surveillance_manuscript/Bioinformatics/mapped_combined_reads/col0_3reps_sort_dedup_filtChr.bed | intersectBed -c -s -a stdin -b ~/cifs-lab/PolV_surveillance_manuscript/Bioinformatics/mapped_combined_reads/nrpe1_3reps_sort_dedup_filtChr.bed | intersectBed -c -S -a stdin -b ~/cifs-lab/PolV_surveillance_manuscript/Bioinformatics/mapped_combined_reads/nrpe1_3reps_sort_dedup_filtChr.bed > em0_col0_nrpe1_RIP_strand_opp_Col_nrpe1.bed
+awk '{OFS="\t"}{print $0,0,"+"}' ../output_em1.bed | intersectBed -c -a stdin -b ~/cifs-lab/PolV_surveillance_manuscript/Bioinformatics/mapped_combined_reads/col0_3reps_sort_dedup_filtChr.bed | intersectBed -c -a stdin -b ~/cifs-lab/PolV_surveillance_manuscript/Bioinformatics/mapped_combined_reads/nrpe1_3reps_sort_dedup_filtChr.bed | intersectBed -c -s -a stdin -b ~/cifs-lab/PolV_surveillance_manuscript/Bioinformatics/mapped_combined_reads/col0_3reps_sort_dedup_filtChr.bed | intersectBed -c -S -a stdin -b ~/cifs-lab/PolV_surveillance_manuscript/Bioinformatics/mapped_combined_reads/col0_3reps_sort_dedup_filtChr.bed | intersectBed -c -s -a stdin -b ~/cifs-lab/PolV_surveillance_manuscript/Bioinformatics/mapped_combined_reads/nrpe1_3reps_sort_dedup_filtChr.bed | intersectBed -c -S -a stdin -b ~/cifs-lab/PolV_surveillance_manuscript/Bioinformatics/mapped_combined_reads/nrpe1_3reps_sort_dedup_filtChr.bed > em1_col0_nrpe1_RIP_strand_opp_Col_nrpe1.bed
+awk '{OFS="\t"}{print $0,0,"+"}' ../output_em2.bed | intersectBed -c -a stdin -b ~/cifs-lab/PolV_surveillance_manuscript/Bioinformatics/mapped_combined_reads/col0_3reps_sort_dedup_filtChr.bed | intersectBed -c -a stdin -b ~/cifs-lab/PolV_surveillance_manuscript/Bioinformatics/mapped_combined_reads/nrpe1_3reps_sort_dedup_filtChr.bed | intersectBed -c -s -a stdin -b ~/cifs-lab/PolV_surveillance_manuscript/Bioinformatics/mapped_combined_reads/col0_3reps_sort_dedup_filtChr.bed | intersectBed -c -S -a stdin -b ~/cifs-lab/PolV_surveillance_manuscript/Bioinformatics/mapped_combined_reads/col0_3reps_sort_dedup_filtChr.bed | intersectBed -c -s -a stdin -b ~/cifs-lab/PolV_surveillance_manuscript/Bioinformatics/mapped_combined_reads/nrpe1_3reps_sort_dedup_filtChr.bed | intersectBed -c -S -a stdin -b ~/cifs-lab/PolV_surveillance_manuscript/Bioinformatics/mapped_combined_reads/nrpe1_3reps_sort_dedup_filtChr.bed > em2_col0_nrpe1_RIP_strand_opp_Col_nrpe1.bed
+awk '{OFS="\t"}{print $0,0,"+"}' ../output_em3.bed | intersectBed -c -a stdin -b ~/cifs-lab/PolV_surveillance_manuscript/Bioinformatics/mapped_combined_reads/col0_3reps_sort_dedup_filtChr.bed | intersectBed -c -a stdin -b ~/cifs-lab/PolV_surveillance_manuscript/Bioinformatics/mapped_combined_reads/nrpe1_3reps_sort_dedup_filtChr.bed | intersectBed -c -s -a stdin -b ~/cifs-lab/PolV_surveillance_manuscript/Bioinformatics/mapped_combined_reads/col0_3reps_sort_dedup_filtChr.bed | intersectBed -c -S -a stdin -b ~/cifs-lab/PolV_surveillance_manuscript/Bioinformatics/mapped_combined_reads/col0_3reps_sort_dedup_filtChr.bed | intersectBed -c -s -a stdin -b ~/cifs-lab/PolV_surveillance_manuscript/Bioinformatics/mapped_combined_reads/nrpe1_3reps_sort_dedup_filtChr.bed | intersectBed -c -S -a stdin -b ~/cifs-lab/PolV_surveillance_manuscript/Bioinformatics/mapped_combined_reads/nrpe1_3reps_sort_dedup_filtChr.bed > em3_col0_nrpe1_RIP_strand_opp_Col_nrpe1.bed
+
+intersectBed -wa -wb -a em1_col0_nrpe1_RIP_strand_opp_Col_nrpe1.bed -b ~/cifs-lab/Shriya/Sequences/Exons_final_bedFormat.bed | uniq > PVS_overlapping_genes.bed
+awk '{OFS="\t"}{if($18=="+") {if(($10>1) && ($10>(2*$12))) print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12;} else {if(($9>1) && ($9>(2*$11))) print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12;}}' PVS_overlapping_genes.bed | uniq > PVS_antisenseGenes_atleast2reads.bed 
+awk '{OFS="\t"}{if($18=="+") {if(($10>0) && ($10>(2*$12))) print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12;} else {if(($9>0) && ($9>(2*$11))) print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12;}}' PVS_overlapping_genes.bed | uniq > PVS_antisenseGenes_atleast1reads.bed 
+
+awk '$7>1' em1_col0_nrpe1_RIP_strand_opp_Col_nrpe1.bed | intersectBed -v -a stdin -b ~/cifs-lab/Shriya/Sequences/Exons_final_bedFormat.bed | uniq > non_genic_moreThan1_PVS.bed
+cat non_genic_moreThan1_PVS.bed PVS_antisenseGenes_atleast2reads.bed | sortBed -i stdin | uniq > FILTER1_PVS_antisense_2read.bed
+awk '$7>0' em1_col0_nrpe1_RIP_strand_opp_Col_nrpe1.bed | intersectBed -v -a stdin -b ~/cifs-lab/Shriya/Sequences/Exons_final_bedFormat.bed | uniq > non_genic_moreThan0_PVS.bed
+cat non_genic_moreThan0_PVS.bed PVS_antisenseGenes_atleast1reads.bed | sortBed -i stdin | uniq > FILTER1_PVS_antisense_1read.bed
+
+intersectBed -v -f 1 -a em1_col0_nrpe1_RIP_strand_opp_Col_nrpe1.bed -b FILTER1_PVS_antisense_1read.bed | sortBed -i stdin > PVSgrp_lessThan1reads_other_add.bed
+
+#awk '$7>1' em0_col0_nrpe1_RIP_strand_opp_Col_nrpe1.bed | sortBed -i stdin > FILTER1_RdDM_2read.bed
+#awk '$7<=1' em0_col0_nrpe1_RIP_strand_opp_Col_nrpe1.bed | sortBed -i stdin > RdDMgrp_lessThan2reads_other_add.bed
+#cat em2_col0_nrpe1_RIP_strand_opp_Col_nrpe1.bed em3_col0_nrpe1_RIP_strand_opp_Col_nrpe1.bed PVSgrp_lessThan2reads_other_add.bed RdDMgrp_lessThan2reads_other_add.bed | sortBed -i stdin > FILTER1_other.bed
+
+awk '$7>0' em0_col0_nrpe1_RIP_strand_opp_Col_nrpe1.bed | sortBed -i stdin > FILTER1_RdDM_1read.bed
+awk '$7==0' em0_col0_nrpe1_RIP_strand_opp_Col_nrpe1.bed | sortBed -i stdin > RdDMgrp_lessThan1reads_other_add.bed
+
+cat em2_col0_nrpe1_RIP_strand_opp_Col_nrpe1.bed em3_col0_nrpe1_RIP_strand_opp_Col_nrpe1.bed PVSgrp_lessThan1reads_other_add.bed RdDMgrp_lessThan1reads_other_add.bed | sortBed -i stdin > FILTER1_other.bed
+
+awk '{OFS="\t"}{print $0,"PVS"}' FILTER1_PVS_antisense_1read.bed > labelled_FILTER1_PVS.bed
+awk '{OFS="\t"}{print $0,"RdDM"}' FILTER1_RdDM_1read.bed > labelled_FILTER1_RdDM.bed
+awk '{OFS="\t"}{print $0,"other"}' FILTER1_other.bed > labelled_FILTER1_other.bed
+
+cat labelled_FILTER1_PVS.bed labelled_FILTER1_RdDM.bed labelled_FILTER1_other.bed | sortBed -i stdin > all_bins_labelled.bed
